@@ -35,7 +35,7 @@ class TestNeutronOVSCtlActions(CharmTestCase):
     @patch.object(ovs, 'action_fail')
     def test_list_br(self, action_fail, action_set):
         ovs.list_br()
-        self.subprocess.check_call.assert_called_once_with(
+        self.subprocess.check_output.assert_called_once_with(
             ['ovs-vsctl', '--', 'list-br'])
-        self.assertFalse(action_set.called)
+        self.assertTrue(action_set.called)
         self.assertFalse(action_fail.called)

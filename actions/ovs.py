@@ -17,11 +17,11 @@
 import subprocess
 import os
 import sys
+sys.path.append('hooks/')
+
 from charmhelpers.core.hookenv import (
     log
 )
-
-sys.path.append('hooks/')
 
 from charmhelpers.core.hookenv import (
     action_fail,
@@ -29,13 +29,12 @@ from charmhelpers.core.hookenv import (
 )
 
 
-def list_br():
+def list_br(args=None):
     ''' List existing OVS bridges '''
     log('Listing bridges')
     cmd = ["ovs-vsctl", "--", "list-br"]
-    #subprocess.check_call(cmd)
-    cmd = "set -x; ovs-vsctl list-br"
-    subprocess.check_call(cmd, shell=True)
+    output = subprocess.check_output(cmd)
+    action_set({'output': output.strip()})
 
 # A dictionary of all the defined actions to callables (which take
 # parsed arguments).
