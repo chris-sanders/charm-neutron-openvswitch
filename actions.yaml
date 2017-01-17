@@ -6,3 +6,10 @@ resume:
     descrpition: Resume the neutron-openvswitch unit.  This action will start neutron-openvswitch services.
 list-br:
     description: List OVS bridges
+list-ports:
+  params:
+    bridge:
+      type: string
+      description: The OVS bridge name
+  required:
+    - bridge

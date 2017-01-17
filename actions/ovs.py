@@ -26,6 +26,7 @@ from charmhelpers.core.hookenv import (
 from charmhelpers.core.hookenv import (
     action_fail,
     action_set,
+    action_get,
 )
 
 
@@ -36,9 +37,22 @@ def list_br(args=None):
     output = subprocess.check_output(cmd)
     action_set({'output': output.strip()})
 
+
+def list_ports(args=None):
+    ''' List ports of an existing OVS bridge '''
+    bridge = action_get("bridge")
+    cmd = ["ovs-vsctl", "--", "list-ports", bridge]
+    log('Listing ports: {}'.format(cmd))
+    output = subprocess.check_output(cmd)
+    action_set({'output': output.strip()})
+
+
 # A dictionary of all the defined actions to callables (which take
 # parsed arguments).
-ACTIONS = {"list-br": list_br}
+ACTIONS = {
+    "list-br": list_br,
+    "list-ports": list_ports,
+}
 
 
 def main(args):

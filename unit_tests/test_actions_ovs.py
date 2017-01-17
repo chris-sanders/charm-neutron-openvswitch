@@ -26,6 +26,7 @@ TO_PATCH = [
     'subprocess',
 ]
 
+
 class TestNeutronOVSCtlActions(CharmTestCase):
 
     def setUp(self):
@@ -37,5 +38,17 @@ class TestNeutronOVSCtlActions(CharmTestCase):
         ovs.list_br()
         self.subprocess.check_output.assert_called_once_with(
             ['ovs-vsctl', '--', 'list-br'])
+        self.assertTrue(action_set.called)
+        self.assertFalse(action_fail.called)
+
+    @patch.object(ovs, 'action_get')
+    @patch.object(ovs, 'action_set')
+    @patch.object(ovs, 'action_fail')
+    def test_list_ports(self, action_fail, action_set, action_get):
+        action_get.return_value = "foo"
+        ovs.list_ports()
+        self.assertTrue(action_get.called_with("bridge"))
+        self.subprocess.check_output.assert_called_once_with(
+            ['ovs-vsctl', '--', 'list-ports', "foo"])
         self.assertTrue(action_set.called)
         self.assertFalse(action_fail.called)
